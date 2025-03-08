@@ -1,7 +1,6 @@
-import os
 import google.generativeai as genai
 from PIL import Image
-import io
+import os, io
 
 # Configure the API key
 GOOGLE_API_KEY = "AIzaSyB5pbuKm2oi25OhzTDVAjN45EIfQeQ3aqc"  # Replace with your actual API key
