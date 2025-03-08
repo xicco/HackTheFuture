@@ -24,7 +24,7 @@ def classify_clothing(image_path):
         2. MEDIUM: Should be donated (wearable but shows signs of use)
         3. BAD: Should be recycled (damaged, unwearable)
 
-        Respond with ONLY the category (GOOD, MEDIUM, or BAD) followed by a brief explanation.
+        Respond with ONLY the category (GOOD, MEDIUM, or BAD) followed by a thorough explanation.
         """
 
         # Get response from Gemini
@@ -32,11 +32,12 @@ def classify_clothing(image_path):
         result = response.text
 
         # Extract the category
-        if "GOOD" in result.upper().split():
+        result_upper = result.upper()
+        if any(word in result_upper for word in ["GOOD", "1"]):
             category = "GOOD"
-        elif "MEDIUM" in result.upper().split():
+        elif any(word in result_upper for word in ["MEDIUM", "2"]):
             category = "MEDIUM"
-        elif "BAD" in result.upper().split():
+        elif any(word in result_upper for word in ["BAD", "3"]):
             category = "BAD"
         else:
             category = "UNKNOWN"
