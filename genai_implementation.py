@@ -90,5 +90,5 @@ def test_classification(image_path):
 # Main execution
 if __name__ == "__main__":
     # Test the classification with a sample image
-    test_image = "image 1.png"  # Replace with your image path
+    test_image = "image1.png"  # Replace with your image path
     test_classification(test_image)
