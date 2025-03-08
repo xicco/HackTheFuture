@@ -1,6 +1,6 @@
 import google.generativeai as genai
 from PIL import Image
-import os, io
+import os
 
 # Configure the API key
 GOOGLE_API_KEY = "AIzaSyB5pbuKm2oi25OhzTDVAjN45EIfQeQ3aqc"  # Replace with your actual API key
@@ -18,13 +18,19 @@ def classify_clothing(image_path):
 
         # Create prompt for Gemini
         prompt = """
-        Analyze this clothing item and determine its condition.
-        Classify it into one of these categories:
-        1. GOOD: Can be resold (minimal wear, good condition)
-        2. MEDIUM: Should be donated (wearable but shows signs of use)
-        3. BAD: Should be recycled (damaged, unwearable)
+        You are a clothing condition assessment expert. Analyze the clothing item in the image and evaluate the following factors:
+        1. Stains: Are there any visible stains? If yes, describe them.
+        2. Material Quality: Assess the fabric's condition (e.g., pilling, tears, or wear).
+        3. Overall Quality: Provide an overall assessment of the item's condition.
 
-        Respond with ONLY the category (GOOD, MEDIUM, or BAD) followed by a thorough explanation.
+        Based on your analysis, classify the item into one of these categories:
+        - GOOD: Can be resold (minimal wear, good condition)
+        - MEDIUM: Should be donated (wearable but shows signs of use)
+        - BAD: Should be recycled (damaged, unwearable)
+
+        Respond with:
+        - Category (GOOD, MEDIUM, or BAD)
+        - A detailed explanation covering stains, material quality, and overall quality.
         """
 
         # Get response from Gemini
@@ -33,11 +39,11 @@ def classify_clothing(image_path):
 
         # Extract the category
         result_upper = result.upper()
-        if any(word in result_upper for word in ["GOOD", "1"]):
+        if "GOOD" in result_upper:
             category = "GOOD"
-        elif any(word in result_upper for word in ["MEDIUM", "2"]):
+        elif "MEDIUM" in result_upper:
             category = "MEDIUM"
-        elif any(word in result_upper for word in ["BAD", "3"]):
+        elif "BAD" in result_upper:
             category = "BAD"
         else:
             category = "UNKNOWN"
@@ -74,11 +80,10 @@ def test_classification(image_path):
     result = classify_clothing(image_path)
 
     print("\n=== CLASSIFICATION RESULTS ===")
-    print(f"Category: {result.get('category', 'UNKNOWN')}")
 
     # Safely access the explanation key
     if 'explanation' in result:
-        print(f"Explanation: {result['explanation']}")
+        print(f"Explanation:\n{result['explanation']}")
     else:
         print(f"Response: {result}")  # Print the raw result if no explanation key
 
@@ -90,5 +95,5 @@ def test_classification(image_path):
 # Main execution
 if __name__ == "__main__":
     # Test the classification with a sample image
-    test_image = "image1.png"  # Replace with your image path
+    test_image = "stained_clothes.jpg"  # Replace with your image path
     test_classification(test_image)
