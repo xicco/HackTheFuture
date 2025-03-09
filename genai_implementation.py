@@ -87,5 +87,3 @@ if __name__ == "__main__":
     # Testing the classification with a sample image
     test_image = "mint_clothes.png"  # Replace with image path!
     test_classification(test_image)
-
-s
