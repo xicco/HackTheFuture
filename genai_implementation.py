@@ -2,21 +2,17 @@ import google.generativeai as genai
 from PIL import Image
 import os
 
-# Configure the API key
-GOOGLE_API_KEY = "AIzaSyB5pbuKm2oi25OhzTDVAjN45EIfQeQ3aqc"  # Replace with your actual API key
+
+GOOGLE_API_KEY = "AIzaSyB5pbuKm2oi25OhzTDVAjN45EIfQeQ3aqc"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 
-# Function to classify clothing
 def classify_clothing(image_path):
     try:
-        # Load the image
         img = Image.open(image_path)
 
-        # Generate content using Gemini
         model = genai.GenerativeModel('gemini-1.5-flash')
 
-        # Create prompt for Gemini
         prompt = """
         You are a clothing condition assessment expert. Analyze the clothing item in the image and evaluate the following factors:
         1. Stains: Are there any visible stains? If yes, describe them.
@@ -33,11 +29,9 @@ def classify_clothing(image_path):
         - A detailed explanation covering stains, material quality, and overall quality.
         """
 
-        # Get response from Gemini
         response = model.generate_content([prompt, img])
         result = response.text
 
-        # Extract the category
         result_upper = result.upper()
         if "GOOD" in result_upper:
             category = "GOOD"
@@ -63,7 +57,6 @@ def classify_clothing(image_path):
         }
 
 
-# Get recommendation based on category
 def get_recommendation(category):
     recommendations = {
         "GOOD": "This item can be resold in our second-hand marketplace.",
@@ -74,26 +67,23 @@ def get_recommendation(category):
     return recommendations.get(category, "Unable to process.")
 
 
-# Test with a sample image
 def test_classification(image_path):
     print(f"Analyzing image: {image_path}")
     result = classify_clothing(image_path)
 
     print("\n=== CLASSIFICATION RESULTS ===")
 
-    # Safely access the explanation key
     if 'explanation' in result:
         print(f"Explanation:\n{result['explanation']}")
     else:
-        print(f"Response: {result}")  # Print the raw result if no explanation key
+        print(f"Response: {result}")
 
     if 'recommendation' in result:
         print(f"Recommendation: {result['recommendation']}")
     print("==============================\n")
 
 
-# Main execution
 if __name__ == "__main__":
-    # Test the classification with a sample image
-    test_image = "stained_clothes.jpg"  # Replace with your image path
+    # Testing the classification with a sample image
+    test_image = "mint_clothes.png"  # Replace with image path!
     test_classification(test_image)
